@@ -1,0 +1,8 @@
+# Dependencies for OFCOURSE
+# Please install these libraries with
+# `pip install -r requirements.txt`
+
+gym==0.25.1
+seaborn==0.11.2
+tensorboard==2.9.1
+torch==1.12.1
