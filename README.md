@@ -1,6 +1,6 @@
-# Order Fulfillment by Multi-Agent Reinforcement Learning
+# OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment
 
-Code for paper "Order Fulfillment by Multi-Agent Reinforcement Learning".
+Code for paper "OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment" under review of NeurIPS 2023 Datasets and Benchmarks Track.
 
 # Installation
 
