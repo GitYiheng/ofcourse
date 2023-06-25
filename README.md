@@ -82,9 +82,13 @@ for _t in range(num_steps):
 
 See [docs/act_obs.md](docs/act_obs.md).
 
+# Data Collection and Organization
+
+See [docs/data.md](docs/data.md).
+
 # Order Source Management
 
 The order source is a mechanism that takes in the simulation step as its input and generates a set of order instances as its output.
-Currently, the orders are placed according to a repeating pattern.
-Support for external order source management will be added soon.
+Currently, orders are placed according to a prescribed repeating pattern.
+External order source management will be added soon.
 
