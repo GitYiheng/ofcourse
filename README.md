@@ -23,7 +23,7 @@ To get started:
 >>> pip install -r requirements.txt
 ```
 
-# Reproducing Results for Paper
+# Reproducing Paper Results
 
 ## Task 1 &mdash; Fulfillment of Physical and Virtual Orders in One System
 
@@ -68,7 +68,7 @@ Monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable
 >>> tensorboard --log_dir=runs
 ```
 
-# Environment
+# Import Existing Environment
 
 OFCOURSE is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
 It is the standard API to communicate between reinforcement learning algorithms and environments.
@@ -85,20 +85,12 @@ for _t in range(num_steps):
         obs = env.reset()                              # start a new episode when current one ends
 ```
 
-# Action Space and Observation Space
-
-See [docs/act_obs.md](docs/act_obs.md).
-
-# Data Collection and Organization
-
-See [docs/data.md](docs/data.md).
-
-# Environment Customization
+# Customize Environment
 
 Customized fulfillment systems can be constructed in OFCOURSE.
 Here, we use [Task 1 (Fulfillment of Physical and Virtual Orders in One System)](env/define_exp1_env.py) from the paper as an example.
 
-![Fulfillment of Physical and Virtual Orders in One System](figs/physical_virtual.png)
+<p align="center"><img src="figs/physical_virtual.png" height="120"></p>
 
 ## Import Modules
 
@@ -175,3 +167,11 @@ The order source is a mechanism that takes in the simulation step as its input a
 Currently, orders are placed according to a prescribed repeating pattern.
 External order source management will be added soon.
 
+# Data Collection and Generation
+
+The fulfillment systems presented in the paper are inspired by practical problems: experiment 1 (fulfillment of physical and virtual orders in one system) originates from Cainiao's domestic fulfillment business and experiment 2 (cross-border order fulfillment) stems from the fulfillment business of AliExpress.
+Due to data disclosure regulation of the company, synthetic data is used for demonstration, which can be found in [exp1](env/define_exp1_env.py) and [exp2](env/define_exp2_env.py).
+
+# Action Space and Observation Space
+
+See [docs/act_obs.md](docs/act_obs.md).
