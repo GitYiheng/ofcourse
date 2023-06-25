@@ -96,9 +96,9 @@ See [docs/data.md](docs/data.md).
 # Environment Customization
 
 Customized fulfillment systems can be constructed in OFCOURSE.
-Here, we use [Task 1 (Fulfillment of Physical and Virtual Orders in One System)](../env/define_exp1_env.py) from the paper as an example.
+Here, we use [Task 1 (Fulfillment of Physical and Virtual Orders in One System)](env/define_exp1_env.py) from the paper as an example.
 
-![Fulfillment of Physical and Virtual Orders in One System](../figs/physical_virtual.png)
+![Fulfillment of Physical and Virtual Orders in One System](figs/physical_virtual.png)
 
 ## Import Modules
 
