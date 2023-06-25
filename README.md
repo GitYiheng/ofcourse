@@ -145,7 +145,7 @@ Here, one Container is an Inventory and another Container is a Buffer.
 In regard to Operations, we have one Operation for storing incoming Orders to the Inventory and two Operations for consolidating and dispatching Orders toward their destinated Buffers.
 
 ```python
-# 3rd stage in agent 0
+# 3RD STAGE IN AGENT 0
 agent0_layer3 = FulfillmentUnit()
 agent0_layer3_inventory_resource = Resource(constraint=32, normal_price=0.6, overage_price=2.0, occupied=0)
 agent0_layer3_buffer0_resource = Resource(constraint=-1, normal_price=0.0, overage_price=0.0, occupied=0)
