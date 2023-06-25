@@ -16,7 +16,7 @@ Required libraries can be installed via pip:
 
 # Reproducing Results for Paper
 
-`task 1: fulfillment of physical and virtual orders`
+`task 1: fulfillment of physical and virtual orders in one system`
 ```console
 >>> sh ./run_exp/exp1/run_exp1_ppo.sh
 >>> sh ./run_exp/exp1/run_exp1_happo.sh
