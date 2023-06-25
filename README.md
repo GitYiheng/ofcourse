@@ -12,6 +12,7 @@ This library requires Python >= 3.7.
 Required libraries can be installed via pip:
 
 ```console
+>>> git clone https://github.com/GitYiheng/ofcourse.git
 >>> cd ofcourse
 >>> pip install -r requirements.txt
 ```
