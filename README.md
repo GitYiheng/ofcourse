@@ -171,3 +171,10 @@ array([0, 1, 0, 0])
 >>> env.observation_space[1].shape[0]
 932
 ```
+
+# Order Source Management
+
+The order source is a mechanism that takes in the simulation step as its input and generates a set of order instances as its output.
+Currently, the orders are placed according to a repeating pattern.
+Support for external order source management will be added soon.
+
