@@ -1,6 +1,8 @@
 # OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment
 
-Code for paper "OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment" under review of NeurIPS 2023 Datasets and Benchmarks Track.
+Code repository for paper "OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment" under review of NeurIPS 2023 Datasets and Benchmarks Track.
+
+![OFCOURSE Teaser](./figs/teaser.png)
 
 # Installation
 
@@ -34,9 +36,7 @@ Required libraries can be installed via pip:
 
 For these two tasks, the fulfillment agents are defined in `env/define_exp1_env.py` and `env/define_exp2_env.py`.
 
-# Customized Usage
-
-## Training
+# Training
 
 `main.py`
 ```python
@@ -60,7 +60,7 @@ You can monitor the training progress with [TensorBoard](https://pytorch.org/doc
 >>> tensorboard --log_dir=runs
 ```
 
-## Environment
+# Environment
 
 Our order fulfillment environment is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
 It is the standard API to communicate between reinforcement learning algorithms and environments.
