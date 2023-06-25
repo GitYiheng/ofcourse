@@ -19,7 +19,8 @@ Required libraries can be installed via pip:
 
 # Reproducing Results for Paper
 
-`task 1: fulfillment of physical and virtual orders in one system`
+## Task 1 &mdash; Fulfillment of Physical and Virtual Orders in One System
+
 ```console
 >>> sh ./run_exp/exp1/run_exp1_ppo.sh
 >>> sh ./run_exp/exp1/run_exp1_happo.sh
@@ -27,7 +28,8 @@ Required libraries can be installed via pip:
 >>> sh ./run_exp/exp1/run_exp1_clo.sh
 ```
 
-`task 2: cross-border order fulfillment`
+## Task 2 &mdash; Cross-Border Order Fulfillment
+
 ```console
 >>> sh ./run_exp/exp2/run_exp2_ppo.sh
 >>> sh ./run_exp/exp2/run_exp2_happo.sh
@@ -35,11 +37,10 @@ Required libraries can be installed via pip:
 >>> sh ./run_exp/exp2/run_exp2_clo.sh
 ```
 
-For these two tasks, the fulfillment agents are defined in `env/define_exp1_env.py` and `env/define_exp2_env.py`.
+For these two tasks, the fulfillment agents are defined in [env/define_exp1_env.py](env/define_exp1_env.py) and [env/define_exp2_env.py](env/define_exp2_env.py).
 
 # Training
 
-`main.py`
 ```python
 from algo.runner import Runner                          # import runner
 from algo.arguments import get_args                     # import argument parser
@@ -65,7 +66,6 @@ We can monitor the training progress with [TensorBoard](https://pytorch.org/docs
 Our order fulfillment environment is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
 It is the standard API to communicate between reinforcement learning algorithms and environments.
 
-`min_env_usage.py`
 ```python
 from env.exp1_env import Exp1Env                       # import env
 env = Exp1()                                           # create an env instance
