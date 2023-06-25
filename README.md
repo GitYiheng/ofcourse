@@ -6,14 +6,20 @@ Code repository for paper "OFCOURSE: A Multi-Agent Reinforcement Learning Enviro
 
 # Installation
 
-This library requires Python >= 3.7.
+This repository requires Python >= 3.7.
 [Miniconda](https://docs.conda.io/en/latest/miniconda.html#system-requirements)/[Anaconda](https://docs.anaconda.com/anaconda/install/) is our recommended Python distribution.
 
-Required libraries can be installed via pip:
+To get started:
+
+1. Clone this repository and move to the OFCOURSE directory:
 
 ```console
->>> git clone https://github.com/GitYiheng/ofcourse.git
->>> cd ofcourse
+>>> git clone https://github.com/GitYiheng/ofcourse.git && cd ofcourse
+```
+
+2. Install the dependencies:
+
+```console
 >>> pip install -r requirements.txt
 ```
 
@@ -49,13 +55,13 @@ runner = Runner(args)                                   # create a runner instan
 runner.run()                                            # start learning or evaluation
 ```
 
-We can train `happo` on `exp1`:
+Train `happo` on `exp1`:
 
 ```console
 >>> python main.py --env=exp1 --algo=happo --mode=learn --log_dir=runs/exp1_happo --seed=10
 ```
 
-We can monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable/tensorboard.html):
+Monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable/tensorboard.html):
 
 ```console
 >>> tensorboard --log_dir=runs
