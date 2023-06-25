@@ -48,6 +48,7 @@ For these two tasks, the fulfillment agents are defined in [env/define_exp1_env.
 # Training
 
 ```python
+# file name: main.py
 from algo.runner import Runner                          # import runner
 from algo.arguments import get_args                     # import argument parser
 args = get_args()                                       # parse arguments
