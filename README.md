@@ -92,6 +92,10 @@ See [docs/act_obs.md](docs/act_obs.md).
 
 See [docs/data.md](docs/data.md).
 
+# Environment Customization
+
+See [doc/customization.md](doc/customization.md).
+
 # Order Source Management
 
 The order source is a mechanism that takes in the simulation step as its input and generates a set of order instances as its output.
