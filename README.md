@@ -63,7 +63,7 @@ We can monitor the training progress with [TensorBoard](https://pytorch.org/docs
 
 # Environment
 
-Our order fulfillment environment is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
+OFCOURSE is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
 It is the standard API to communicate between reinforcement learning algorithms and environments.
 
 ```python
