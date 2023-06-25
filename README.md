@@ -50,12 +50,11 @@ runner.run()                                            # start learning or eval
 
 We can train `happo` on `exp1`:
 
-`terminal`
 ```console
 >>> python main.py --env=exp1 --algo=happo --mode=learn --log_dir=runs/exp1_happo --seed=10
 ```
 
-You can monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable/tensorboard.html):
+We can monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable/tensorboard.html):
 
 ```console
 >>> tensorboard --log_dir=runs
