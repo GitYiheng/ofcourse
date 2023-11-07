@@ -179,10 +179,9 @@ See [docs/act_obs.md](docs/act_obs.md).
 # Citation
 
 ```
-@inproceedings{
-    zhu2023ofcourse,
+@inproceedings{zhu2023ofcourse,
     title={{OFCOURSE}: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment},
-    author={Yiheng Zhu and Yang Zhan and Xuankun Huang and Yuwei Chen and yujie Chen and Jiangwen Wei and Wei Feng and Yinzhi Zhou and Haoyuan Hu and Jieping Ye},
+    author={Yiheng Zhu and Yang Zhan and Xuankun Huang and Yuwei Chen and Yujie Chen and Jiangwen Wei and Wei Feng and Yinzhi Zhou and Haoyuan Hu and Jieping Ye},
     booktitle={Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
     year={2023},
     url={https://openreview.net/forum?id=0RSQEh9lRG}
