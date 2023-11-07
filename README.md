@@ -1,6 +1,6 @@
-# OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment
+# OFCOURSE
 
-Code repository for paper "OFCOURSE: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment" under review of NeurIPS 2023 Datasets and Benchmarks Track.
+OFCOURSE is a simulated environment enables multi-agent reinforcement learning for order fulfillment.
 
 ![OFCOURSE Teaser](./figs/teaser.png)
 
@@ -175,3 +175,16 @@ Due to data disclosure regulation of the company, synthetic data is used for dem
 # Action Space and Observation Space
 
 See [docs/act_obs.md](docs/act_obs.md).
+
+# Citation
+
+```
+    @inproceedings{
+    zhu2023ofcourse,
+    title={{OFCOURSE}: A Multi-Agent Reinforcement Learning Environment for Order Fulfillment},
+    author={Yiheng Zhu and Yang Zhan and Xuankun Huang and Yuwei Chen and yujie Chen and Jiangwen Wei and Wei Feng and Yinzhi Zhou and Haoyuan Hu and Jieping Ye},
+    booktitle={Thirty-seventh Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
+    year={2023},
+    url={https://openreview.net/forum?id=0RSQEh9lRG}
+}
+```
