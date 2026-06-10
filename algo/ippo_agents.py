@@ -1,6 +1,7 @@
 import random
 import torch
 import numpy as np
+from tqdm import tqdm
 from algo.base_agents import BaseAgents
 from algo.network import Critic, Actor
 
@@ -36,21 +37,28 @@ class IPPOAgents(BaseAgents):
         log_probs_n_th = []
         values_n_th = []
 
-        observation_n = self.env.reset()
+        observation_n, _ = self.env.reset()
         step_episode = 0
         terminal = False
 
         while not terminal:
             # agents.generate_action & env.step
-            observation_n_th = [torch.tensor(observation_n[agent_i]) for agent_i in range(self.n_agents)]
+            observation_n_th = [
+                torch.as_tensor(observation_n[agent_i], dtype=torch.float32)
+                for agent_i in range(self.n_agents)
+            ]
             action_n_th, log_prob_n_th = self.generate_action(observation_n_th, explore)
             action_n = [action_n_th[agent_i].detach().tolist() for agent_i in range(self.n_agents)]
             value_n_th = self.generate_value(observation_n_th)
             action_n_md = [self.env.agent_discrete_to_multi_discrete(agent_i, action_n[agent_i]) for agent_i in
                            range(self.n_agents)]
-            next_observation_n, reward_n, done_n, _ = self.env.step(action_n_md)
-            reward_n_th = [torch.tensor(reward_n[agent_i]) for agent_i in range(self.n_agents)]
-            terminal = all((done_n, step_episode >= self.env.max_step))
+            next_observation_n, reward_n, terminated_n, truncated_n, _ = self.env.step(action_n_md)
+            reward_n_th = [
+                torch.as_tensor(reward_n[agent_i], dtype=torch.float32)
+                for agent_i in range(self.n_agents)
+            ]
+            done_n = [terminated or truncated for terminated, truncated in zip(terminated_n, truncated_n)]
+            terminal = all(done_n) or step_episode >= self.env.max_step
             done_n = [terminal for agent_i in range(self.n_agents)]
             done_n_th = [torch.tensor(done_n[agent_i], dtype=torch.float32) for agent_i in range(self.n_agents)]
 
@@ -105,13 +113,20 @@ class IPPOAgents(BaseAgents):
             if logger and self.num_episodes % self.args.log_episode_freq == 0:
                 cumulative_reward_n = np.sum(np.asarray(rewards_n_th) - self.args.r_baseline, axis=0)
                 for agent_i in range(self.n_agents):
-                    logger.info("Episode={}, Cumulative Reward[{}]={}".format(self.num_episodes, agent_i,
-                                                                              cumulative_reward_n[agent_i]))
+                    logger.info(
+                        "Episode={}, Cumulative Reward[{}]={}".format(
+                            self.num_episodes,
+                            agent_i,
+                            self.format_reward(cumulative_reward_n[agent_i]),
+                        )
+                    )
 
             self.num_episodes += 1
 
-        logger.info("\n")
-        batch_indices = random.sample([*range(len(rollout_observations_n_th))], self.args.batch_size)
+        if logger:
+            logger.info("\n")
+        batch_size = min(self.args.batch_size, len(rollout_observations_n_th))
+        batch_indices = random.sample([*range(len(rollout_observations_n_th))], batch_size)
 
         batch_observations_n_th = [rollout_observations_n_th[batch_index] for batch_index in batch_indices]
         batch_actions_n_th = [rollout_actions_n_th[batch_index] for batch_index in batch_indices]
@@ -125,17 +140,18 @@ class IPPOAgents(BaseAgents):
         return batch_observations_n_th, batch_actions_n_th, batch_rewards_n_th, batch_dones_n_th, batch_values_n_th, batch_log_probs_n_th, batch_returns_n_th, batch_advantages_n_th
 
     def train(self, batch_log_probs_n_th, batch_advantages_n_th, batch_values_n_th, batch_returns_n_th):
-        batch_actor_loss_n_th = [[torch.tensor(0.) for agent_i in range(self.n_agents)] for step in
-                                 range(self.args.batch_size)]
+        batch_size = len(batch_log_probs_n_th)
+        batch_actor_loss_n_th = [[torch.zeros((), dtype=torch.float32) for agent_i in range(self.n_agents)] for step in
+                                 range(batch_size)]
         for agent_i in range(self.n_agents):
-            for t in reversed(range(self.args.batch_size)):
+            for t in reversed(range(batch_size)):
                 batch_actor_loss_n_th[t][agent_i] = -(
                             batch_log_probs_n_th[t][agent_i] * batch_advantages_n_th[t][agent_i])
 
-        actor_loss_n_th = [torch.tensor(0.) for agent_i in range(self.n_agents)]
+        actor_loss_n_th = [torch.zeros((), dtype=torch.float32) for agent_i in range(self.n_agents)]
         for agent_i in range(self.n_agents):
             actor_loss_n_th[agent_i] = torch.stack(
-                [batch_actor_loss_n_th[t][agent_i] for t in range(self.args.batch_size)]).mean()
+                [batch_actor_loss_n_th[t][agent_i] for t in range(batch_size)]).mean()
 
         for agent_i in range(self.n_agents):
             self.optim_actors[agent_i].zero_grad()
@@ -143,17 +159,17 @@ class IPPOAgents(BaseAgents):
             torch.nn.utils.clip_grad_norm_(self.actors[agent_i].parameters(), max_norm=self.args.clip_grad_norm_actor)
             self.optim_actors[agent_i].step()
 
-        batch_critic_loss_n_th = [[torch.tensor(0.) for agent_i in range(self.n_agents)] for step in
-                                  range(self.args.batch_size)]
+        batch_critic_loss_n_th = [[torch.zeros((), dtype=torch.float32) for agent_i in range(self.n_agents)] for step in
+                                  range(batch_size)]
         for agent_i in range(self.n_agents):
-            for t in range(self.args.batch_size):
+            for t in range(batch_size):
                 batch_critic_loss_n_th[t][agent_i] = torch.nn.functional.smooth_l1_loss(batch_values_n_th[t][agent_i],
                                                                                         batch_returns_n_th[t][agent_i])
 
-        critic_loss_n_th = [torch.tensor(0.) for agent_i in range(self.n_agents)]
+        critic_loss_n_th = [torch.zeros((), dtype=torch.float32) for agent_i in range(self.n_agents)]
         for agent_i in range(self.n_agents):
             critic_loss_n_th[agent_i] = torch.stack(
-                [batch_critic_loss_n_th[t][agent_i] for t in range(self.args.batch_size)]).mean()
+                [batch_critic_loss_n_th[t][agent_i] for t in range(batch_size)]).mean()
 
         for agent_i in range(self.n_agents):
             self.optim_critics[agent_i].zero_grad()
@@ -164,7 +180,8 @@ class IPPOAgents(BaseAgents):
         return actor_loss_n_th, critic_loss_n_th
 
     def learn(self, logger=None, summary=None):
-        for t_epoch in range(self.args.n_epoch):
+        progress = tqdm(range(self.args.n_epoch), desc="Training IPPO", unit="epoch")
+        for t_epoch in progress:
             batch_observations_n_th, batch_actions_n_th, batch_rewards_n_th, batch_dones_n_th, batch_values_n_th, batch_log_probs_n_th, batch_returns_n_th, batch_advantages_n_th = self.generate_rollouts(
                 explore=True, logger=logger, summary=summary)
             actor_loss_n_th, critic_loss_n_th = self.train(batch_log_probs_n_th, batch_advantages_n_th,
@@ -180,13 +197,11 @@ class IPPOAgents(BaseAgents):
                     summary.add_scalar(tag="Loss/critic_{}".format(agent_i),
                                        scalar_value=critic_loss_n_th[agent_i].item(), global_step=t_epoch)
 
-                cols = 50
-                ratio = t_epoch / self.args.n_epoch
-                percent = int(ratio * 100)
-                s1 = int(cols * ratio)
-                s2 = cols - s1
-                logger.info(
-                    f"\r=== Training Progress [{'#' * s1}{' ' * s2}] epoch={t_epoch}/{self.args.n_epoch} [{percent}%] ===")
+                progress.set_postfix(
+                    return_=self.format_progress_value(mean_batch_return_th.item()),
+                    actor_loss=self.format_progress_value(sum(loss.item() for loss in actor_loss_n_th) / self.n_agents),
+                    critic_loss=self.format_progress_value(sum(loss.item() for loss in critic_loss_n_th) / self.n_agents),
+                )
                 logger.info("Return={}".format(mean_batch_return_th.item()))
                 for agent_i in range(self.n_agents):
                     logger.info('Actor[{}] Loss={}'.format(agent_i, actor_loss_n_th[agent_i].item()))
@@ -194,7 +209,8 @@ class IPPOAgents(BaseAgents):
                 logger.info("\n")
 
     def evaluate(self, logger=None, summary=None):
-        for t_epoch in range(self.args.n_epoch):
+        progress = tqdm(range(self.args.n_epoch), desc="Evaluating IPPO", unit="epoch")
+        for t_epoch in progress:
             batch_observations_n_th, batch_actions_n_th, batch_rewards_n_th, batch_dones_n_th, batch_values_n_th, batch_log_probs_n_th, batch_returns_n_th, batch_advantages_n_th = self.generate_rollouts(
                 explore=False, logger=logger, summary=summary)
 
@@ -202,12 +218,5 @@ class IPPOAgents(BaseAgents):
                 mean_batch_return_th = torch.mean(
                     torch.sum(torch.tensor(batch_returns_n_th, dtype=torch.float32), dim=1))
                 summary.add_scalar(tag="Return", scalar_value=mean_batch_return_th.item(), global_step=t_epoch)
-
-                cols = 50
-                ratio = t_epoch / self.args.n_epoch
-                percent = int(ratio * 100)
-                s1 = int(cols * ratio)
-                s2 = cols - s1
-                logger.info(
-                    f"\r=== Evaluate Progress [{'#' * s1}{' ' * s2}] epoch={t_epoch}/{self.args.n_epoch} [{percent}%] ===")
-                logger.info("Return={}\n===\n".format(mean_batch_return_th.item()))
+                progress.set_postfix(return_=self.format_progress_value(mean_batch_return_th.item()))
+                logger.info("Return={}".format(mean_batch_return_th.item()))

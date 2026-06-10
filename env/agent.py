@@ -1,13 +1,4 @@
-from gym import Env, spaces
-from gym.envs.registration import register
-
-import numpy as np
 from collections import deque
-
-from env.resource import Resource
-from env.container import Buffer, Inventory
-from env.operation import OpDispatch, OpStore, OpRoute, OpConsoRoute
-from env.fulfillment_unit import FulfillmentUnit
 
 
 class Agent:
@@ -15,7 +6,8 @@ class Agent:
         self.fulfillment_units = deque()  # seller to customer rightward
 
     def add_fulfillment_unit(self, fulfillment_unit=None):
-        if fulfillment_unit: self.fulfillment_units.append(fulfillment_unit)
+        if fulfillment_unit is not None:
+            self.fulfillment_units.append(fulfillment_unit)
 
     def step(self, action, step_count=None):
         _reward_update = self.update()

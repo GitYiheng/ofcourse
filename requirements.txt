@@ -2,7 +2,12 @@
 # Please install these libraries with
 # `pip install -r requirements.txt`
 
-gym==0.25.1
-seaborn==0.11.2
-tensorboard==2.9.1
-torch==1.12.1
+gymnasium==1.0.0
+matplotlib==3.9.2
+numpy==1.26.4
+pandas==2.2.3
+pytest==8.3.4
+seaborn==0.13.2
+tensorboard==2.18.0
+torch==2.5.1
+tqdm==4.67.1

@@ -13,7 +13,6 @@ import random
 from torch.utils.tensorboard import SummaryWriter
 
 from utils.logger import Logger
-from utils.plot import plot
 
 
 class Runner:
@@ -78,4 +77,6 @@ class Runner:
             raise ValueError("mode must be 'learn' or 'evaluate'!")
 
         if self.summary and self.args.plot:
+            from utils.plot import plot
+
             plot(self.args.log_dir, tag="Return", smooth=3)

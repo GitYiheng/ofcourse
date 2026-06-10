@@ -1,6 +1,5 @@
 from enum import Enum
-import argparse
-import gym
+from gymnasium import spaces
 
 
 class ServiceLevel(Enum):
@@ -11,7 +10,9 @@ class ServiceLevel(Enum):
 
 class MultiAgentActionSpace(list):
     def __init__(self, agents_action_space):
-        for _a in agents_action_space: assert isinstance(_a, gym.spaces.space.Space)
+        for action_space in agents_action_space:
+            if not isinstance(action_space, spaces.Space):
+                raise TypeError(f"Expected gymnasium Space, got {type(action_space)!r}")
         super(MultiAgentActionSpace, self).__init__(agents_action_space)
         self._agents_action_space = agents_action_space
 
@@ -21,7 +22,9 @@ class MultiAgentActionSpace(list):
 
 class MultiAgentObservationSpace(list):
     def __init__(self, agents_observation_space):
-        for _a in agents_observation_space: assert isinstance(_a, gym.spaces.space.Space)
+        for observation_space in agents_observation_space:
+            if not isinstance(observation_space, spaces.Space):
+                raise TypeError(f"Expected gymnasium Space, got {type(observation_space)!r}")
         super().__init__(agents_observation_space)
         self._agents_observation_space = agents_observation_space
 

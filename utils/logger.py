@@ -38,7 +38,7 @@ class Logger:
         return "{}/log_{}_{}_seed{}_{}.txt".format(log_info_dir, args.env, args.algo, args.seed, int(time.time()))
 
     def print_logo(self):
-        self.logger.info('''
+        self.logger.info(r'''
             
           /$$$$$$  /$$$$$$$$ /$$$$$$   /$$$$$$  /$$   /$$ /$$$$$$$   /$$$$$$  /$$$$$$$$
          /$$__  $$| $$_____//$$__  $$ /$$__  $$| $$  | $$| $$__  $$ /$$__  $$| $$_____/

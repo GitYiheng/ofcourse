@@ -12,7 +12,8 @@ class Operation:
         self.workstation = deque()  # operable orders
 
     def load(self, order=None):
-        if order: self.workstation.append(order)
+        if order is not None:
+            self.workstation.append(order)
 
     def execute(self, step_count=None):
         raise NotImplementedError
@@ -34,7 +35,8 @@ class OpRoute(Operation):
             _buffer_chunk = _buffer.proceed()
             for _order in _buffer_chunk: self.load(_order)
         _empty_workstation = False if self.workstation else True
-        if self.workstation: _avg_op_price = self.op_price / len(self.workstation)  # average operation price
+        if self.workstation:
+            _avg_op_price = self.op_price / len(self.workstation)  # average operation price
         while self.workstation:
             _order = self.workstation.popleft()
             _order.update(specified_price=_avg_op_price, specified_time=1)
@@ -63,7 +65,8 @@ class OpConsoRoute(Operation):
             self.load(_order)
         _empty_workstation = False if self.workstation else True
         # average operation price
-        if self.workstation: avg_op_price = self.op_price / len(self.workstation)
+        if self.workstation:
+            avg_op_price = self.op_price / len(self.workstation)
         while self.workstation:
             _order = self.workstation.popleft()
             _order.update(specified_price=avg_op_price, specified_time=1)
@@ -83,7 +86,8 @@ class OpDispatch(Operation):
         _order_chunk = self.order_src.order_at_step_count(step_count) if step_count else None
         # for _order in _order_chunk: self.load(_order)
         if _order_chunk:
-            for _order in _order_chunk: self.load(_order)
+            for _order in _order_chunk:
+                self.load(_order)
         _empty_workstation = False if self.workstation else True
         while self.workstation:
             _order = self.workstation.popleft()

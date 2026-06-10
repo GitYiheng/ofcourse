@@ -9,7 +9,7 @@ class OrderSource:
         self._init_order_queue(order_queue=order_queue)
 
     def _init_order_queue(self, order_queue=None, order_ratio=0.1):
-        if order_queue.any():
+        if order_queue is not None and np.asarray(order_queue).any():
             _order_queue_bool = order_queue
         else:
             _prob = np.random.random_sample(self.order_queue_len)
@@ -21,7 +21,7 @@ class OrderSource:
             _order_queue_chunk.append(_temp_order)
             self.order_queue.append(_order_queue_chunk)
         # number of non-empty chunk
-        non_empty_bool = Counter([order_chunk[0] != None for order_chunk in self.order_queue])
+        non_empty_bool = Counter([order_chunk[0] is not None for order_chunk in self.order_queue])
         self.num_order = non_empty_bool[True]
 
     def order_at_step_count(self, step_count=None):

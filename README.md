@@ -6,7 +6,7 @@ OFCOURSE is a simulated environment enables multi-agent reinforcement learning f
 
 # Installation
 
-This repository requires Python >= 3.7.
+This repository requires Python 3.12.
 [Miniconda](https://docs.conda.io/en/latest/miniconda.html#system-requirements)/[Anaconda](https://docs.anaconda.com/anaconda/install/) is our recommended Python distribution.
 
 To get started:
@@ -17,7 +17,14 @@ To get started:
 >>> git clone https://github.com/GitYiheng/ofcourse.git && cd ofcourse
 ```
 
-2. Install the dependencies:
+2. Create and activate the Conda environment:
+
+```console
+>>> conda env create -f environment.yml
+>>> conda activate ofcourse
+```
+
+Alternatively, install the pip dependencies in an existing Python 3.12 environment:
 
 ```console
 >>> pip install -r requirements.txt
@@ -70,19 +77,21 @@ Monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable
 
 # Import Existing Environment
 
-OFCOURSE is structured according to the format of [OpenAI Gym](https://github.com/openai/gym).
+OFCOURSE is structured according to the format of [Gymnasium](https://gymnasium.farama.org/).
 It is the standard API to communicate between reinforcement learning algorithms and environments.
 
 ```python
 from env.exp1_env import Exp1Env                       # import env
-env = Exp1()                                           # create an env instance
-obs = env.reset()                                      # start a new episode
+from algo.arguments import get_args                    # import argument parser
+args = get_args()                                      # parse arguments
+env = Exp1Env(args)                                    # create an env instance
+obs, info = env.reset()                                # start a new episode
 num_steps = 10                                         # number of steps
 for _t in range(num_steps):
     sampled_actions = env.action_space.sample()        # sample actions (not from algo)
-    obs, rewards, dones, _ = env.step(sampled_actions) # interact with env
-    if all(dones):
-        obs = env.reset()                              # start a new episode when current one ends
+    obs, rewards, terminated, truncated, info = env.step(sampled_actions)
+    if all(done or cut for done, cut in zip(terminated, truncated)):
+        obs, info = env.reset()                        # start a new episode when current one ends
 ```
 
 # Customize Environment

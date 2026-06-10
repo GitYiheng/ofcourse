@@ -13,10 +13,12 @@ class FulfillmentUnit:
         self.longitude = None
 
     def add_container(self, container=None):
-        if container: self.containers.append(container)
+        if container is not None:
+            self.containers.append(container)
 
     def add_operation(self, operation=None):
-        if operation: self.operations.append(operation)
+        if operation is not None:
+            self.operations.append(operation)
 
     def update(self):
         _step_price = 0
