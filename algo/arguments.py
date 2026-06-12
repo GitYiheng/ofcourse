@@ -35,6 +35,13 @@ def get_args():
     parser.add_argument('--gae_lambda', type=float, default=0.95, help='lambda of generalized advantage estimation')
 
     parser.add_argument('--plot', type=bool, default=False, help='plot epoch-return')
+    parser.add_argument('--visualize', action='store_true', help='send environment state to the visualizer server')
+    parser.add_argument(
+        '--visualizer_url',
+        type=str,
+        default='http://localhost:5000/api/state',
+        help='visualizer state endpoint',
+    )
 
     args = parser.parse_args()
 

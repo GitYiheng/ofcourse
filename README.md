@@ -75,6 +75,43 @@ Monitor the training progress with [TensorBoard](https://pytorch.org/docs/stable
 >>> tensorboard --log_dir=runs
 ```
 
+# Real-Time Visualization
+
+OFCOURSE includes a lightweight browser visualizer for watching fulfillment units, buffers, inventories, and order flow during training or evaluation.
+
+Start the visualization server from the project root:
+
+```console
+>>> python visualizer_server.py
+```
+
+Then open the dashboard in a browser:
+
+```console
+>>> http://localhost:5000
+```
+
+In a second terminal, run an experiment with `--visualize` enabled:
+
+```console
+>>> python main.py --env=exp1 --algo=ppo --mode=learn --visualize
+```
+
+For Windows PowerShell, set `PYTHONPATH` first if Python cannot import the local `env` package:
+
+```console
+>>> $env:PYTHONPATH='.'
+>>> python main.py --env=exp1 --algo=ppo --mode=learn --visualize
+```
+
+To visualize `exp2`, switch the environment argument:
+
+```console
+>>> python main.py --env=exp2 --algo=ppo --mode=learn --visualize
+```
+
+The shell scripts under `run_exp/` can still be used from Git Bash or WSL, but they do not enable visualization unless `--visualize` is added to the `python main.py ...` command inside the script.
+
 # Import Existing Environment
 
 OFCOURSE is structured according to the format of [Gymnasium](https://gymnasium.farama.org/).

@@ -17,7 +17,6 @@ dist/
 # Virtual environments
 .venv/
 venv/
-env/
 .env/
 
 # Local environment/config files
